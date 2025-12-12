@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { VideoList } from "../../components/VideoList";
 import { Video } from "../../../types";
+import { getVideosCurtidos } from "../../../services/api/interactions";
 
-interface Props {
-  videos: Video[];
-  onVideoClick: (video: Video) => void;
-}
+const LikedPage: React.FC = () => {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const LikedPage: React.FC<Props> = ({ videos, onVideoClick }) => {
+  useEffect(() => {
+    async function load() {
+      try {
+        const usuarioId = 1; // ou do contexto
+        const liked = await getVideosCurtidos(usuarioId);
+        setVideos(liked);
+      } catch (err) {
+        console.error("Erro ao carregar curtidos:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
+  if (loading) return <p>Carregando...</p>;
 
   return (
     <VideoList
-      videos={videos}
-      onVideoClick={onVideoClick}
       title="Vídeos Curtidos"
-      emptyMessage="Você ainda não curtiu nenhum vídeo."
+      videos={videos}
+      onDeleteVideo={() => {}}
+      onVideoClick={(v) => console.log(v)}
     />
   );
 };

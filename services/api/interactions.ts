@@ -1,11 +1,16 @@
 import api from "./api";
 import { Comment } from "../../types";
+import { Video } from "./videos";
 
 interface CurtidaResponseDto {
     id: number;
-    usuarioId: number;
-    videoId: number;
-    dataCurtida: string;
+    nomeUsuario: string;
+    video: {
+        id: number;
+        titulo: string;
+        thumbnail: string;
+        urlVideo: string;
+    };
 }
 
 interface CommentBackendDto {
@@ -16,29 +21,44 @@ interface CommentBackendDto {
     timestamp: string;
 }
 
-export const interactionService = {
+export async function getVideosCurtidos(usuarioId: number) {
+  const { data } = await api.get(`/curtidas/usuario/${usuarioId}`);
 
-    async getHistory(usuarioId: number): Promise<string[]> {
-        const response = await api.get(`/visualizacoes/${usuarioId}`);
+  const normalized: Video[] = data.map((c: CurtidaResponseDto) => ({
+      id: String(c.video.id),
+      title: c.video.titulo,
+        description: "",
+        category: "",
+        url: c.video.urlVideo,
+        thumbnail: c.video.thumbnail,
+        createdAt: 0,
+        original: c.video
+  }));
 
-        return response.data.map((h: any) => h.videoId.toString());
+  return normalized;
+}
+
+
+export const interacao = {
+
+    async getHistory(usuarioId: number): Promise<number[]> {
+        try {
+            const response = await api.get(`/visualizacoes/usuario/${usuarioId}`);
+
+            return response.data
+                .map((v: any) => v.video?.id)
+                .filter((id: number | undefined) => id !== undefined);
+
+        } catch (e) {
+            console.error("Erro ao carregar histórico:", e);
+            return [];
+        }
     },
+
 
     async addToHistory(usuarioId: number, videoId: string): Promise<void> {
         console.log("💾 Salvando histórico:", { usuarioId, videoId });
         await api.post(`/visualizacoes/${usuarioId}/${videoId}`);
-    },
-
-    async getLikedVideos(userId: number): Promise<string[]> {
-        const response = await api.get<CurtidaResponseDto[]>(`/curtidas/${userId}`);
-
-        console.log("🔥 Curtidas do backend (RAW):", response.data);
-
-        return response.data.map((c: any) => {
-            if (!c) return "0";
-            const id = c.videoId ?? c.video_id ?? c.video?.id ?? 0;
-            return String(id);
-        });
     },
 
     async toggleLike(usuarioId: number, videoId: string) {

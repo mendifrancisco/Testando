@@ -18,9 +18,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  /* ---------------------------------------------------
-     TENTA CARREGAR USUÁRIO NO REFRESH (auth/me)
-  ---------------------------------------------------- */
   useEffect(() => {
     async function loadUser() {
       try {
@@ -36,25 +33,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loadUser();
   }, []);
 
-  /* ---------------------------------------------------
-     LOGIN
-  ---------------------------------------------------- */
   const login = async (email: string, senha: string) => {
     const data = await authService.login(email, senha);
     setUser(data);
   };
 
-  /* ---------------------------------------------------
-     REGISTER
-  ---------------------------------------------------- */
   const register = async (nome: string, email: string, senha: string) => {
     const data = await authService.register(nome, email, senha);
     setUser(data);
   };
 
-  /* ---------------------------------------------------
-     LOGOUT
-  ---------------------------------------------------- */
   const logout = async () => {
     await authService.logout();
     setUser(null);

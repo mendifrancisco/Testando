@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import comentarioService, { ComentarioResponseDto } from "../../../services/api/comentarios";
+import "./ComentariosPendentesPage.css";
 
 export default function ComentariosPendentesPage() {
     const [comentarios, setComentarios] = useState<ComentarioResponseDto[]>([]);
@@ -24,7 +25,6 @@ export default function ComentariosPendentesPage() {
     const handleAprovar = async (id: number) => {
         try {
             await comentarioService.aprovar(id);
-            // Remover da lista após aprovar
             setComentarios(prev => prev.filter(c => c.id !== id));
         } catch (error) {
             console.error("Erro ao aprovar comentário:", error);
@@ -44,43 +44,45 @@ export default function ComentariosPendentesPage() {
 
     if (carregando) {
         return (
-            <div className="max-w-4xl mx-auto p-6">
-                <h1 className="text-3xl font-bold text-slate-800 mb-6">Comentários Pendentes</h1>
-                <div className="text-center py-12 text-slate-500">Carregando...</div>
+            <div className="comentarios-pendentes-container">
+                <h1 className="comentarios-pendentes-title">Comentários Pendentes</h1>
+                <div className="comentarios-pendentes-loading">Carregando...</div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-3xl font-bold text-slate-800 mb-6">
+        <div className="comentarios-pendentes-container">
+            <h1 className="comentarios-pendentes-title">
                 Comentários Pendentes de Aprovação
             </h1>
 
             {comentarios.length === 0 ? (
-                <div className="bg-white border border-slate-200 rounded-lg p-8 text-center">
-                    <p className="text-slate-500">Nenhum comentário pendente de aprovação.</p>
+                <div className="comentarios-pendentes-empty">
+                    <p className="comentarios-pendentes-empty-text">
+                        Nenhum comentário pendente de aprovação.
+                    </p>
                 </div>
             ) : (
-                <div className="space-y-4">
+                <div className="comentarios-pendentes-list">
                     {comentarios.map((comentario) => (
                         <div
                             key={comentario.id}
-                            className="bg-white border border-slate-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                            className="comentarios-pendentes-card"
                         >
-                            <div className="mb-4">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <span className="text-blue-700 font-semibold">
+                            <div className="comentarios-pendentes-card-content">
+                                <div className="comentarios-pendentes-card-header">
+                                    <div className="comentarios-pendentes-user-info">
+                                        <div className="comentarios-pendentes-avatar">
+                                            <span className="comentarios-pendentes-avatar-text">
                                                 {comentario.usuarioNome.charAt(0).toUpperCase()}
                                             </span>
                                         </div>
-                                        <div>
-                                            <p className="font-semibold text-slate-800">
+                                        <div className="comentarios-pendentes-user-details">
+                                            <p className="comentarios-pendentes-user-name">
                                                 {comentario.usuarioNome}
                                             </p>
-                                            <p className="text-sm text-slate-500">
+                                            <p className="comentarios-pendentes-date">
                                                 {new Date(comentario.criadoEm).toLocaleDateString("pt-BR", {
                                                     day: "2-digit",
                                                     month: "long",
@@ -93,27 +95,27 @@ export default function ComentariosPendentesPage() {
                                     </div>
                                 </div>
 
-                                <div className="mb-3">
-                                    <p className="text-sm text-slate-600 mb-1">
-                                        Vídeo: <span className="font-medium">{comentario.videoTitulo}</span>
+                                <div className="comentarios-pendentes-video-info">
+                                    <p className="comentarios-pendentes-video-text">
+                                        Vídeo: <span className="comentarios-pendentes-video-title">{comentario.videoTitulo}</span>
                                     </p>
                                 </div>
 
-                                <p className="text-slate-700 bg-slate-50 p-4 rounded-lg">
+                                <p className="comentarios-pendentes-text">
                                     {comentario.texto}
                                 </p>
                             </div>
 
-                            <div className="flex gap-3">
+                            <div className="comentarios-pendentes-actions">
                                 <button
                                     onClick={() => handleAprovar(comentario.id)}
-                                    className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+                                    className="comentarios-pendentes-btn comentarios-pendentes-btn-aprovar"
                                 >
                                     ✓ Aprovar
                                 </button>
                                 <button
                                     onClick={() => handleDeletar(comentario.id)}
-                                    className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+                                    className="comentarios-pendentes-btn comentarios-pendentes-btn-rejeitar"
                                 >
                                     ✕ Rejeitar
                                 </button>

@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import api from "./api";
 
 export interface DadosUsuario {
@@ -8,7 +7,6 @@ export interface DadosUsuario {
   role: "ALUNO" | "GESTOR";
 }
 
-// Alias para compatibilidade com AuthContext
 export type UserData = DadosUsuario;
 
 class AuthService {
@@ -21,24 +19,18 @@ class AuthService {
     }
   }
 
-  // Alias para compatibilidade com AuthContext
   async getCurrentUser(): Promise<DadosUsuario | null> {
     return this.me();
   }
 
   async login(email: string, senha: string): Promise<DadosUsuario> {
     const { data } = await api.post("/auth/login", { email, senha });
-
-    console.log("📦 Resposta do login:", data);
-
-    // Garantir que o token não tenha espaços em branco
     const token = data.token?.trim();
 
     if (!token) {
       throw new Error("Token não recebido do servidor");
     }
 
-    console.log("💾 Salvando token:", token);
     localStorage.setItem("token", token);
 
     const { data: usuario } = await api.get<DadosUsuario>("/auth/me");
@@ -50,7 +42,6 @@ class AuthService {
     return this.login(email, senha);
   }
 
-  // Alias para compatibilidade com AuthContext
   async register(nome: string, email: string, senha: string): Promise<DadosUsuario> {
     return this.registrar(nome, email, senha);
   }

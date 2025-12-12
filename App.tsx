@@ -3,21 +3,19 @@ import { Layout } from "./src/components/Layout";
 import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
 
 import videoService from "./services/api/videos";
-import { interactionService } from "./services/api/interactions";
+import { interacao } from "./services/api/interactions";
+import { getVideosCurtidos } from "./services/api/interactions";
 
 import DashboardPage from "./src/pages/Catalogo";
 import UploadPage from "./src/pages/UploadPage";
 import LikedPage from "./src/pages/Curtidas";
 import HistoryPage from "./src/pages/Historico";
 import VideoDetailPage from "./src/pages/VideoDetailPage";
-import StatsPage from "./src/pages/StatsPage";
+import StatsPage from "./src/pages/Dashboard";
 
 import { Video, AppView } from "./types";
 import { AuthPage } from "./src/components/AuthPage";
 
-// =======================================================
-// COMPONENTE PRINCIPAL DA APLICAÇÃO
-// =======================================================
 const AppContent: React.FC = () => {
   const { user, isLoading, isAuthenticated, login, logout, register, isGestor } = useAuth();
 
@@ -30,16 +28,10 @@ const AppContent: React.FC = () => {
   const [historyVideoIds] = useState<string[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
-  // =======================================================
-  // Salvar tela atual no localStorage
-  // =======================================================
   useEffect(() => {
     localStorage.setItem("currentView", currentView);
   }, [currentView]);
 
-  // =======================================================
-  // Redirecionamento automático após login/logout
-  // =======================================================
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
@@ -48,9 +40,6 @@ const AppContent: React.FC = () => {
     }
   }, [isLoading, isAuthenticated]);
 
-  // =======================================================
-  // Carregar vídeos depois do login
-  // =======================================================
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
@@ -58,7 +47,6 @@ const AppContent: React.FC = () => {
       try {
         const serviceVideos = await videoService.buscarTodos();
 
-        // Mapear videos do serviço (id: number) para videos da aplicação (id: string)
         const mappedVideos: Video[] = serviceVideos.map((v: any) => ({
           ...v,
           id: String(v.id),
@@ -68,7 +56,7 @@ const AppContent: React.FC = () => {
         setVideos(mappedVideos);
 
         if (user) {
-          const likes = await interactionService.getLikedVideos(Number(user.id));
+          const likes = await getVideosCurtidos(Number(user.id));
           setLikedVideoIds(new Set(likes));
         }
       } catch (error) {
@@ -79,14 +67,8 @@ const AppContent: React.FC = () => {
     load();
   }, [isAuthenticated, user]);
 
-  // =======================================================
-  // Loading inicial
-  // =======================================================
   if (isLoading) return <div>Carregando...</div>;
 
-  // =======================================================
-  // TELA DE LOGIN
-  // =======================================================
   if (!isAuthenticated) {
     return (
       <AuthPage
@@ -104,9 +86,6 @@ const AppContent: React.FC = () => {
     );
   }
 
-  // =======================================================
-  // ÁREA LOGADA
-  // =======================================================
   return (
     <Layout
       currentView={currentView}
@@ -116,12 +95,11 @@ const AppContent: React.FC = () => {
         setCurrentView(AppView.LOGIN);
       }}
     >
-      {/* Catálogo */}
       {currentView === AppView.DASHBOARD && (
         <DashboardPage
           videos={videos}
           onDeleteVideo={async (id) => {
-            // Conversão de id string para number se a API espera number
+
             await videoService.deletar(Number(id));
             setVideos(v => v.filter(x => x.id !== id));
           }}
@@ -132,7 +110,6 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {/* Upload (somente gestor) */}
       {currentView === AppView.UPLOAD && isGestor && (
         <UploadPage
           setCurrentView={setCurrentView}
@@ -140,7 +117,6 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {/* Curtidos */}
       {currentView === AppView.LIKED && (
         <LikedPage
           videos={videos.filter(v => likedVideoIds.has(v.id))}
@@ -151,7 +127,6 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {/* Histórico */}
       {currentView === AppView.HISTORY && (
         <HistoryPage
           videos={videos.filter(v => historyVideoIds.includes(v.id))}
@@ -162,7 +137,6 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {/* Detalhes do vídeo */}
       {currentView === AppView.VIDEO_DETAIL && selectedVideo && (
         <VideoDetailPage
           video={selectedVideo}
@@ -170,7 +144,7 @@ const AppContent: React.FC = () => {
           isLiked={likedVideoIds.has(selectedVideo.id)}
           onToggleLike={async (id) => {
             if (!user) return;
-            const liked = await interactionService.toggleLike(Number(user.id), id);
+            const liked = await interacao.toggleLike(Number(user.id), id);
 
             setLikedVideoIds(prev => {
               const set = new Set(prev);
@@ -181,7 +155,6 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {/* Estatísticas (somente gestor) */}
       {currentView === AppView.STATS && isGestor && (
         <StatsPage videos={videos} />
       )}
@@ -190,9 +163,6 @@ const AppContent: React.FC = () => {
   );
 };
 
-// =======================================================
-// WRAPPER DO PROVIDER
-// =======================================================
 export default function App() {
   return (
     <AuthProvider>

@@ -44,10 +44,8 @@ export const VideoList: React.FC<VideoListProps> = ({
                 <h2 className={styles.title}>{title}</h2>
             </div>
 
-            {/* Filters Container */}
             <div className={styles.filtersContainer}>
 
-                {/* Search Bar - Top */}
                 <div className={styles.searchWrapper}>
                     <Search className={styles.searchIcon} size={20} />
                     <input
@@ -59,7 +57,6 @@ export const VideoList: React.FC<VideoListProps> = ({
                     />
                 </div>
 
-                {/* Categories - Bottom */}
                 <div>
                     <p className={styles.categoryLabel}>Filtrar por Categoria</p>
                     <div className={styles.categoryList}>
@@ -82,7 +79,6 @@ export const VideoList: React.FC<VideoListProps> = ({
                 </div>
             </div>
 
-            {/* Grid */}
             {filteredVideos.length === 0 ? (
                 <div className={styles.emptyStateContainer}>
                     <div className={styles.emptyStateIconWrapper}>
@@ -99,7 +95,7 @@ export const VideoList: React.FC<VideoListProps> = ({
                             className={styles.card}
                             onClick={() => onVideoClick(video)}
                         >
-                            {/* Thumbnail Placeholder */}
+                            {/* Thumbnail  */}
                             <div className={styles.thumbnailWrapper}>
                                 <div className={styles.thumbnailOverlay}></div>
                                 <Play size={48} className={styles.playIcon} />

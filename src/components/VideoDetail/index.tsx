@@ -35,10 +35,6 @@ export const VideoDetail: React.FC<VideoDetailProps> = ({ video, onBack, isLiked
         carregarComentarios();
     }, [video.id]);
 
-
-
-
-    // Helper to extract YouTube ID if possible (simple regex)
     const getEmbedUrl = (url: string | undefined) => {
         if (!url || typeof url !== 'string') return null;
         try {
@@ -67,9 +63,8 @@ export const VideoDetail: React.FC<VideoDetailProps> = ({ video, onBack, isLiked
             </button>
 
             <div className={styles.grid}>
-                {/* Main Content Column */}
                 <div className={styles.mainContent}>
-                    {/* Video Player */}
+                    
                     <div className={styles.videoPlayerWrapper}>
                         {embedUrl ? (
                             <iframe

@@ -10,7 +10,7 @@ interface Props {
 type SortField = 'title' | 'views' | 'likes' | 'comments' | 'createdAt';
 type SortOrder = 'asc' | 'desc';
 
-const StatsPage: React.FC<Props> = ({ videos }) => {
+const Dashboard: React.FC<Props> = ({ videos }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortField, setSortField] = useState<SortField>('views');
     const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
@@ -83,7 +83,6 @@ const StatsPage: React.FC<Props> = ({ videos }) => {
 
     return (
         <div className={styles.container}>
-            {/* Header */}
             <div>
                 <h2 className={styles.header}>
                     <BarChart3 size={20} className={styles.headerIcon} />
@@ -92,7 +91,6 @@ const StatsPage: React.FC<Props> = ({ videos }) => {
                 <p className={styles.headerSubtitle}>Análise detalhada do desempenho dos vídeos</p>
             </div>
 
-            {/* Cards de Totais - Compactos */}
             <div className={styles.statsGrid}>
                 <div className={styles.statCardBlue}>
                     <div className="flex items-center justify-between mb-2">
@@ -139,7 +137,6 @@ const StatsPage: React.FC<Props> = ({ videos }) => {
                 </div>
             </div>
 
-            {/* Tabela de Estatísticas */}
             <div className={styles.tableContainer}>
                 <div className={styles.tableHeader}>
                     <div className={styles.tableHeaderContent}>
@@ -252,4 +249,4 @@ const StatsPage: React.FC<Props> = ({ videos }) => {
     );
 };
 
-export default StatsPage;
+export default Dashboard;

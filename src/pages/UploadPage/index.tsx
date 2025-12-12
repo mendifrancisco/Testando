@@ -13,7 +13,6 @@ export default function UploadPage({ setCurrentView, setVideos }: Props) {
     const handleSubmit = async (dto: any) => {
         const criado = await videoService.criar(dto);
 
-        // Mapear o vídeo criado para o formato da aplicação
         const mappedVideo: Video = {
             ...criado,
             id: String(criado.id),

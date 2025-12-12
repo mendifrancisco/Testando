@@ -31,18 +31,14 @@ export const Layout: React.FC<LayoutProps> = ({
     children
 }) => {
 
-    // ⛔ ANTES estava pegando isManager (não existia)
-    // ✅ Agora pega os valores reais do AuthContext
     const { isGestor, isAluno, user } = useAuth();
 
-    // Nome exibido
     const displayName =
         user?.nome ??
         user?.name ??
         user?.email ??
         'Usuário';
 
-    // Texto da função
     const roleLabel = isGestor ? 'Portal do Gestor' : 'Área do Aluno';
 
     return (

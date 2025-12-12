@@ -1,0 +1,148 @@
+.comentarios-pendentes-container {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.comentarios-pendentes-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+}
+
+.comentarios-pendentes-loading {
+    text-align: center;
+    padding: 3rem 0;
+    color: #64748b;
+}
+
+.comentarios-pendentes-empty {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.comentarios-pendentes-empty-text {
+    color: #64748b;
+}
+
+.comentarios-pendentes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comentarios-pendentes-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: box-shadow 0.2s;
+}
+
+.comentarios-pendentes-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.comentarios-pendentes-card-content {
+    margin-bottom: 1rem;
+}
+
+.comentarios-pendentes-card-header {
+    margin-bottom: 0.5rem;
+}
+
+.comentarios-pendentes-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.comentarios-pendentes-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #dbeafe;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comentarios-pendentes-avatar-text {
+    color: #1d4ed8;
+    font-weight: 600;
+}
+
+.comentarios-pendentes-user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.comentarios-pendentes-user-name {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.comentarios-pendentes-date {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.comentarios-pendentes-video-info {
+    margin-bottom: 0.75rem;
+}
+
+.comentarios-pendentes-video-text {
+    font-size: 0.875rem;
+    color: #475569;
+    margin-bottom: 0.25rem;
+}
+
+.comentarios-pendentes-video-title {
+    font-weight: 500;
+}
+
+.comentarios-pendentes-text {
+    color: #334155;
+    background-color: #f8fafc;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    line-height: 1.5;
+}
+
+.comentarios-pendentes-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.comentarios-pendentes-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+}
+
+.comentarios-pendentes-btn-aprovar {
+    background-color: #16a34a;
+    color: #ffffff;
+}
+
+.comentarios-pendentes-btn-aprovar:hover {
+    background-color: #15803d;
+}
+
+.comentarios-pendentes-btn-rejeitar {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.comentarios-pendentes-btn-rejeitar:hover {
+    background-color: #b91c1c;
+}

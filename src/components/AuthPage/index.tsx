@@ -190,7 +190,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ view, onNavigate, onLogin, o
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            // TODO: Implement forgot password logic
                                             alert('Funcionalidade de redefinir senha será implementada em breve');
                                         }}
                                         className={styles.forgotPasswordLink}
